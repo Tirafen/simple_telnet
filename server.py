@@ -6,6 +6,10 @@ MAX_CONNECTIONS = 10
 INPUTS = list()
 OUTPUTS = list()
 
+f = open('records.txt', 'w')
+f.write('Записи сервера:' + '\n')
+f.close()
+
 
 def get_non_blocking_server_socket():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -31,8 +35,16 @@ def handle_readables(readables, server):
                 pass
 
             if data:
-                print(f"Спортсмен {data[0:4]} прошел отсечку {data[5:7]},"
-                      f" время {data[8:18]}, группа {data[21:23]}")
+                result = f"Спортсмен {data[0:4]} прошел отсечку {data[5:7]}, время {data[8:18]}, группа {data[21:23]}"
+                if data[21:23] == '00':
+                    print(result)
+                    f = open('records.txt', 'a')
+                    f.write(result + '\n')
+                    f.close()
+                else:
+                    f = open('records.txt', 'a')
+                    f.write(result + '\n')
+                    f.close()
                 if resource not in OUTPUTS:
                     OUTPUTS.append(resource)
             else:
